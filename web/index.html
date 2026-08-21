@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Magical Magician</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="app" class="start-screen">
+    <div class="stars" aria-hidden="true"></div>
+    <div class="moon" aria-hidden="true"></div>
+    <div class="skyline" aria-hidden="true">
+      <span class="tower tower-left"></span><span class="tower tower-right"></span>
+      <span class="grave grave-one"></span><span class="grave grave-two"></span>
+      <span class="grave grave-three"></span><span class="grave grave-four"></span>
+    </div>
+
+    <section class="title-card" aria-labelledby="game-title">
+      <p class="eyebrow">A PIXEL ART ADVENTURE</p>
+      <h1 id="game-title"><span>THE MAGICAL</span><strong>MAGICIAN</strong></h1>
+      <p class="tagline">The dead have risen. Your spells are the last light.</p>
+
+      <div class="duel" aria-label="A wizard confronts three zombies">
+        <div class="wizard" aria-hidden="true">
+          <i class="hat"><b class="hat-rune"></b></i><i class="hat-band"></i><i class="hat-brim"></i>
+          <i class="hair"></i><i class="face"><b class="eye left-eye"></b><b class="eye right-eye"></b><b class="nose"></b></i>
+          <i class="cape"><b class="cape-fold"></b></i><i class="sleeve"><b class="hand"></b></i>
+          <i class="wand"><b class="wand-gem"></b></i>
+        </div>
+        <div class="spell" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="zombies" aria-hidden="true">
+          <i class="zombie z-one"><b class="z-head"></b><b class="z-arm"></b></i>
+          <i class="zombie z-two"><b class="z-head"></b><b class="z-arm"></b></i>
+          <i class="zombie z-three"><b class="z-head"></b><b class="z-arm"></b></i>
+        </div>
+      </div>
+
+      <button id="start-button" class="start-button" type="button">
+        <span>START ADVENTURE</span><kbd>ENTER</kbd>
+      </button>
+      <p id="status" class="status" aria-live="polite">Press start to begin your quest</p>
+    </section>
+
+    <p class="copyright">© 2026 THE MAGICAL MAGICIAN <span>•</span> 1 PLAYER</p>
+  </main>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
