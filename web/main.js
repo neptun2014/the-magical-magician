@@ -15,6 +15,7 @@ const gameOver = document.getElementById("game-over");
 const returnToTitleButton = document.getElementById("return-to-title");
 const levelText = document.getElementById("level-text");
 const finalLevelText = document.getElementById("final-level-text");
+const nextLevelText = document.getElementById("next-level-text");
 const abilityButtons = [...document.querySelectorAll("[data-skill]")];
 
 const playerState = { x: 80, y: 0, velocityY: 0, direction: 1, grounded: true };
@@ -152,6 +153,7 @@ function updateHealthDisplay() {
 function updateLevelDisplay() {
   levelText.textContent = `LV. ${levelState.current}`;
   finalLevelText.textContent = levelState.current;
+  nextLevelText.textContent = `NEXT: ${10 - (levelState.kills % 10)}`;
 }
 
 function recordZombieDefeat() {
@@ -275,7 +277,7 @@ function activateSelectedSkill() {
     createBlackHole();
     enemies.filter((zombie) => zombie.alive).forEach((zombie) => {
       zombie.health = 1;
-      damageZombie(zombie, false);
+      damageZombie(zombie);
     });
   }
   updateAbilityBar();

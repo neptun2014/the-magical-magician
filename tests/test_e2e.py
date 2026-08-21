@@ -25,6 +25,7 @@ def test_app_script_runs(server_url, page, shot):
     expect(page.locator("#game-screen")).to_have_attribute("aria-hidden", "false")
     expect(page.locator("#player")).to_be_visible()
     expect(page.locator("#level-text")).to_have_text("LV. 1")
+    expect(page.locator("#next-level-text")).to_have_text("NEXT: 10")
     expect(page.locator(".enemy-zombie")).to_have_count(3)
     page.locator("#arena").click(position={"x": 300, "y": 100})
     expect(page.locator(".fireball")).to_have_count(1)
