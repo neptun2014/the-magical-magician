@@ -24,6 +24,9 @@ def test_app_script_runs(server_url, page, shot):
     page.get_by_role("button", name="START ADVENTURE ENTER").click()
     expect(page.locator("#game-screen")).to_have_attribute("aria-hidden", "false")
     expect(page.locator("#player")).to_be_visible()
+    expect(page.locator(".enemy-zombie")).to_have_count(3)
+    page.locator("#arena").click(position={"x": 300, "y": 100})
+    expect(page.locator(".fireball")).to_have_count(1)
     shot("training-grounds")
 
 
