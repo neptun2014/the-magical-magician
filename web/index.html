@@ -46,7 +46,10 @@
     <section id="game-screen" class="game-screen" aria-label="Wizard training grounds" aria-hidden="true">
       <header class="game-hud">
         <p><span class="hud-label">WIZARD</span> <b>LV. 1</b></p>
-        <div class="health" aria-label="Health: 3 out of 3"><i></i><i></i><i></i></div>
+        <div class="player-health" aria-label="Player health">
+          <span id="player-health-text">150 / 150</span>
+          <div class="health-frame"><i id="player-health-bar"></i></div>
+        </div>
         <p class="controls">A / D MOVE <span>•</span> W JUMP</p>
       </header>
       <div id="arena" class="arena">
@@ -54,6 +57,7 @@
         <div class="far-ruins" aria-hidden="true"></div>
         <div class="ground" aria-hidden="true"></div>
         <div class="small-hill" aria-hidden="true"><i></i></div>
+        <div id="enemies" class="enemies" aria-label="Approaching zombies"></div>
         <div id="player" class="player wizard-sprite" role="img" aria-label="The player wizard">
           <i class="sprite-hat"><b></b></i><i class="sprite-band"></i><i class="sprite-brim"></i>
           <i class="sprite-face"><b></b><b></b></i><i class="sprite-cape"></i>
@@ -64,6 +68,11 @@
       <div id="touch-controls" class="touch-controls" aria-label="Touch movement control">
         <div id="joystick" class="joystick" role="application" aria-label="Drag to move; drag upward to jump"><i id="joystick-knob"></i></div>
       </div>
+      <section id="game-over" class="game-over" aria-hidden="true" aria-label="Game over">
+        <p>THE GRAVEYARD CLAIMS ANOTHER</p>
+        <h2>מתת!</h2>
+        <button id="return-to-title" type="button">חזרה למסך הפתיחה</button>
+      </section>
     </section>
 
     <p class="copyright">© 2026 THE MAGICAL MAGICIAN <span>•</span> 1 PLAYER</p>
