@@ -17,6 +17,7 @@ const levelText = document.getElementById("level-text");
 const finalLevelText = document.getElementById("final-level-text");
 const nextLevelText = document.getElementById("next-level-text");
 const abilityButtons = [...document.querySelectorAll("[data-skill]")];
+const DISPLAY_ZOOM = 0.5;
 
 const playerState = { x: 80, y: 0, velocityY: 0, direction: 1, grounded: true };
 const playerHealth = { current: 150, max: 150 };
@@ -352,8 +353,8 @@ function zombieNearTarget(x, y) {
   enemies.forEach((zombie) => {
     if (!zombie.alive) return false;
     const bounds = zombie.element.getBoundingClientRect();
-    const centerX = bounds.left - arenaBounds.left + bounds.width / 2;
-    const centerY = bounds.top - arenaBounds.top + bounds.height / 2;
+    const centerX = (bounds.left - arenaBounds.left + bounds.width / 2) / DISPLAY_ZOOM;
+    const centerY = (bounds.top - arenaBounds.top + bounds.height / 2) / DISPLAY_ZOOM;
     const distance = Math.hypot(centerX - x, centerY - y);
     if (distance < closestDistance) {
       closest = zombie;
@@ -407,7 +408,7 @@ function updateJoystick(event) {
     y = (y / distance) * maxDistance;
   }
   touchAxis.x = x / maxDistance;
-  joystickKnob.style.transform = `translate(${x}px, ${y}px)`;
+  joystickKnob.style.transform = `translate(${x / DISPLAY_ZOOM}px, ${y / DISPLAY_ZOOM}px)`;
   if (y < -maxDistance * 0.52 && !touchAxis.jumping) {
     jump();
     touchAxis.jumping = true;
@@ -481,7 +482,10 @@ function castFireball(event) {
   nextFireballAt = now + 1000;
   event.preventDefault();
   const bounds = arena.getBoundingClientRect();
-  const target = { x: event.clientX - bounds.left, y: event.clientY - bounds.top };
+  const target = {
+    x: (event.clientX - bounds.left) / DISPLAY_ZOOM,
+    y: (event.clientY - bounds.top) / DISPLAY_ZOOM,
+  };
   skillState.aim = target;
   const origin = {
     x: playerState.x + (playerState.direction === 1 ? 71 : 4),
