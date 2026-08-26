@@ -3,7 +3,6 @@ const startButton = document.getElementById("start-button");
 const status = document.getElementById("status");
 const gameScreen = document.getElementById("game-screen");
 const arena = document.getElementById("arena");
-const gameWorld = document.getElementById("game-world");
 const player = document.getElementById("player");
 const hill = document.querySelector(".small-hill");
 const enemiesLayer = document.getElementById("enemies");
@@ -19,8 +18,8 @@ const finalLevelText = document.getElementById("final-level-text");
 const nextLevelText = document.getElementById("next-level-text");
 const abilityButtons = [...document.querySelectorAll("[data-skill]")];
 
-const WORLD_ZOOM = 0.5;
-const playerState = { x: 160, y: 0, velocityY: 0, direction: 1, grounded: true };
+const DISPLAY_ZOOM = 0.5;
+const playerState = { x: 80, y: 0, velocityY: 0, direction: 1, grounded: true };
 const playerHealth = { current: 150, max: 150 };
 const levelState = { current: 1, kills: 0 };
 const keys = new Set();
@@ -79,7 +78,7 @@ function spawnZombie(x, variant = 0) {
 function spawnInitialZombies() {
   if (initialWaveSpawned) return;
   initialWaveSpawned = true;
-  const width = gameWorld.clientWidth;
+  const width = arena.clientWidth;
   spawnZombie(width - 70, 0);
   spawnZombie(-34, 1);
   spawnZombie(width * 0.64, 2);
@@ -88,7 +87,7 @@ function spawnInitialZombies() {
 function spawnReinforcements() {
   const openings = Math.min(2, 9 - livingZombieCount());
   if (openings > 0) spawnZombie(-48, 1);
-  if (openings > 1) spawnZombie(gameWorld.clientWidth + 18, 2);
+  if (openings > 1) spawnZombie(arena.clientWidth + 18, 2);
 }
 
 function updateZombies(delta) {
@@ -204,15 +203,15 @@ function createExplosion(x, y) {
   const explosion = document.createElement("i");
   explosion.className = "spell-explosion";
   explosion.style.transform = `translate(${x}px, ${y}px)`;
-  gameWorld.append(explosion);
+  arena.append(explosion);
   window.setTimeout(() => explosion.remove(), 430);
 }
 
 function createBlackHole() {
   const blackHole = document.createElement("i");
   blackHole.className = "black-hole";
-  blackHole.style.transform = `translate(${gameWorld.clientWidth / 2}px, ${gameWorld.clientHeight / 2}px)`;
-  gameWorld.append(blackHole);
+  blackHole.style.transform = `translate(${arena.clientWidth / 2}px, ${arena.clientHeight / 2}px)`;
+  arena.append(blackHole);
   window.setTimeout(() => blackHole.remove(), 900);
 }
 
@@ -220,14 +219,14 @@ function castBlast() {
   const target = skillState.aim;
   const origin = {
     x: playerState.x + (playerState.direction === 1 ? 71 : 4),
-    y: gameWorld.clientHeight - 76 - playerState.y - 44,
+    y: arena.clientHeight - 76 - playerState.y - 44,
   };
   const dx = target.x - origin.x;
   const dy = target.y - origin.y;
   const distance = Math.hypot(dx, dy) || 1;
   const fireball = document.createElement("i");
   fireball.className = "fireball blast-fireball";
-  gameWorld.append(fireball);
+  arena.append(fireball);
   const startedAt = performance.now();
   const duration = Math.min(900, Math.max(130, (distance / 650) * 1000));
   function fly(now) {
@@ -312,7 +311,7 @@ function returnToTitle() {
   allies.length = 0;
   initialWaveSpawned = false;
   playerHealth.current = playerHealth.max;
-  playerState.x = 160;
+  playerState.x = 80;
   playerState.y = 0;
   playerState.velocityY = 0;
   playerState.direction = 1;
@@ -322,7 +321,7 @@ function returnToTitle() {
   skillState.selected = -1;
   skillState.shieldUntil = 0;
   Object.keys(skillState.cooldowns).forEach((skill) => { skillState.cooldowns[skill] = 0; });
-  player.style.transform = "translate(160px, 0) scaleX(1)";
+  player.style.transform = "translate(80px, 0) scaleX(1)";
   updateHealthDisplay();
   updateLevelDisplay();
   gameOver.setAttribute("aria-hidden", "true");
@@ -354,8 +353,8 @@ function zombieNearTarget(x, y) {
   enemies.forEach((zombie) => {
     if (!zombie.alive) return false;
     const bounds = zombie.element.getBoundingClientRect();
-    const centerX = (bounds.left - arenaBounds.left + bounds.width / 2) / WORLD_ZOOM;
-    const centerY = (bounds.top - arenaBounds.top + bounds.height / 2) / WORLD_ZOOM;
+    const centerX = (bounds.left - arenaBounds.left + bounds.width / 2) / DISPLAY_ZOOM;
+    const centerY = (bounds.top - arenaBounds.top + bounds.height / 2) / DISPLAY_ZOOM;
     const distance = Math.hypot(centerX - x, centerY - y);
     if (distance < closestDistance) {
       closest = zombie;
@@ -409,7 +408,7 @@ function updateJoystick(event) {
     y = (y / distance) * maxDistance;
   }
   touchAxis.x = x / maxDistance;
-  joystickKnob.style.transform = `translate(${x}px, ${y}px)`;
+  joystickKnob.style.transform = `translate(${x / DISPLAY_ZOOM}px, ${y / DISPLAY_ZOOM}px)`;
   if (y < -maxDistance * 0.52 && !touchAxis.jumping) {
     jump();
     touchAxis.jumping = true;
@@ -439,7 +438,7 @@ function updateGame(timestamp) {
   if (!gameActive) return;
   const delta = Math.min((timestamp - lastFrame) / 1000 || 0, 0.04);
   lastFrame = timestamp;
-  const arenaWidth = gameWorld.clientWidth;
+  const arenaWidth = arena.clientWidth;
   const speed = 235;
 
   const horizontalInput = (keys.has("d") ? 1 : 0) - (keys.has("a") ? 1 : 0) + touchAxis.x;
@@ -484,13 +483,13 @@ function castFireball(event) {
   event.preventDefault();
   const bounds = arena.getBoundingClientRect();
   const target = {
-    x: (event.clientX - bounds.left) / WORLD_ZOOM,
-    y: (event.clientY - bounds.top) / WORLD_ZOOM,
+    x: (event.clientX - bounds.left) / DISPLAY_ZOOM,
+    y: (event.clientY - bounds.top) / DISPLAY_ZOOM,
   };
   skillState.aim = target;
   const origin = {
     x: playerState.x + (playerState.direction === 1 ? 71 : 4),
-    y: gameWorld.clientHeight - 76 - playerState.y - 44,
+    y: arena.clientHeight - 76 - playerState.y - 44,
   };
   const dx = target.x - origin.x;
   const dy = target.y - origin.y;
@@ -499,7 +498,7 @@ function castFireball(event) {
   const fireball = document.createElement("i");
   fireball.className = "fireball";
   fireball.setAttribute("aria-hidden", "true");
-  gameWorld.append(fireball);
+  arena.append(fireball);
 
   const speed = 650;
   const startedAt = performance.now();
@@ -517,7 +516,7 @@ function castFireball(event) {
     spark.className = "fire-trail";
     spark.setAttribute("aria-hidden", "true");
     spark.style.transform = `translate(${x + (Math.random() - .5) * 8}px, ${y + (Math.random() - .5) * 8}px)`;
-    gameWorld.append(spark);
+    arena.append(spark);
     window.setTimeout(() => spark.remove(), 420);
   }
   function fly(now) {
