@@ -48,3 +48,4 @@ h1 span { color: #71d9dc; } h1 strong { color: #ffcf62; font-size: clamp(46px, 1
 .game-screen { transform: translateY(16px) scale(.5); transform-origin: center; }
 .game-active .game-screen { transform: scale(.5); }
 @media (hover: none) and (pointer: coarse) { .game-screen { transform: translateY(16px); }.game-active .game-screen { transform: none; } }
+.touch-device .game-active .game-screen { transform: none; }

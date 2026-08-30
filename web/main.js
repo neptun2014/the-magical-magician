@@ -1,4 +1,6 @@
 // The title screen is deliberately self-contained while the game is built.
+document.documentElement.classList.toggle("touch-device", navigator.maxTouchPoints > 0);
+
 const startButton = document.getElementById("start-button");
 const status = document.getElementById("status");
 const gameScreen = document.getElementById("game-screen");
